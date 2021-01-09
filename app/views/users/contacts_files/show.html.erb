@@ -1,0 +1,42 @@
+
+<p id="notice"><%= notice %></p>
+<div class="container">
+  <p>
+    <strong>File name:</strong>
+    <%= @contacts_file.contacts %>
+  </p>
+
+  <p>
+    <strong>Header mappings:</strong>
+    <%= @contacts_file.header_mappings %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <%= @contacts_file.status %>
+  </p>
+  <p>
+    <strong> Results:</strong>
+    <%= @contacts_file.get_contact_count -  @contacts_file.importer_logs.size %> of <%= @contacts_file.get_contact_count%> imported successfully
+                                                                                        </p>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">contact</th>
+      <th scope="col">errors</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @contacts_file.importer_logs.each do |log| %>
+      <tr>
+        <td><%=log.candidate %></td>
+        <td><%=log.error_log %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to 'Edit', edit_contacts_file_path(@contacts_file) %> |
+  <%= link_to 'Back', contacts_files_path %> | <%= link_to 'import contacts', execute_import_contacts_file_path(@contacts_file) unless @contacts_file.nil?%>
+
+</div>

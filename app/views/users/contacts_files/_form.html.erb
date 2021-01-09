@@ -1,0 +1,39 @@
+<%= form_with(model: contacts_file, local: true) do |form| %>
+  <% if contacts_file.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(contacts_file.errors.count, "error") %> prohibited this contacts_file from being saved:</h2>
+
+      <ul>
+        <% contacts_file.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% unless contacts_file.persisted? %>
+    <div class="form-group">
+      <div class="custom-file">
+        <%= form.file_field :contacts, class:"custom-file-input" %>
+        <%= form.label :contacts, class:"custom-file-label" %>
+      </div>
+    </div>
+
+  <%end %>
+  <% if contacts_file.persisted? %>
+    <h3>Contact file header mappings</h3>
+    <%Contact.attribute_names.collect{|x| x if x != "id" && x != "franchise" && x != "cc_4_digits" && x != "user_id"}.compact.each do |header| %>
+      <%= form.label header %>
+      <div class="form-group">
+      <select name="contacts_file[header_mappings][<%=header%>]">
+       <% @custom_headers.each do |c_header| %>
+        <option value="<%=c_header%>"><%=c_header%></option>
+        <%end %>
+      </select>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="actions">
+    <button type="submit" class="btn btn-primary">save</button>
+  </div>
+<% end %>

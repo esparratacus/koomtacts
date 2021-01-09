@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+<div class="container">
+  <h1>Contacts Files</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>contacts file</th>
+        <th>Status</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @contacts_files.each do |contacts_file| %>
+        <tr>
+          <td><%= contacts_file.contacts %></td>
+          <td><%= contacts_file.status %></td>
+          <td><%= link_to 'Show', contacts_file %></td>
+          <td><%= link_to 'Edit', edit_contacts_file_path(contacts_file) %></td>
+          <td><%= link_to 'Destroy', contacts_file, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+  <%= paginate @contacts_files %>
+  <%= link_to 'New Contacts File', new_contacts_file_path %>
+</div>
