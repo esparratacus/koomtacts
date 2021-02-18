@@ -4,6 +4,6 @@ class ImportWorker
 
   def perform(contacts_file_id)
     @contacts_file = ContactsFile.find contacts_file_id
-    @contacts_file.import_contacts_from_file
+    @contacts_file.import_contacts
   end
 end
