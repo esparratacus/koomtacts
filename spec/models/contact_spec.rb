@@ -24,6 +24,10 @@ RSpec.describe Contact, type: :model do
     it { expect(subject).to allow_value(subject.cc_number).for(:cc_number) }
   end
 
+  context 'associations' do
+    it {expect(subject).to belong_to(:user)}
+  end
+
   context 'callbacks' do
     it 'should assign remaining fields to contact' do
       last_four= subject.cc_number.last(4)
