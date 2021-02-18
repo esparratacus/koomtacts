@@ -22,6 +22,7 @@ RSpec.describe Contact, type: :model do
     it { expect(subject).to allow_value(subject.dob).for(:dob) }
     it { expect(subject).not_to allow_value('12/29/2014').for(:dob) }
     it { expect(subject).to allow_value(subject.cc_number).for(:cc_number) }
+    it { expect(subject).not_to allow_value('12345').for(:cc_number) }
   end
 
   context 'associations' do
