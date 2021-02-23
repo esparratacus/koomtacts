@@ -12,24 +12,4 @@ RSpec.describe ContactsFile, type: :model do
     it { should validate_inclusion_of(:status).in_array(ContactsFile::IMPORT_STATUSES).allow_nil }
   end
 
-
-  describe '#import_contacts' do
-    subject { create(:contacts_file)}
-    context 'when the contact only has valid objects' do
-      it 'creates contact objects' do
-        subject.import_contacts
-        expect(subject.user.contacts.size).to eq(1)
-      end
-
-    end
-
-    context 'when header mappings are not set' do
-      it 'should raise a HeaderMappingsNotSetException' do
-        subject.header_mappings = nil
-        expect { subject.import_contacts }.to raise_error(Exceptions::HeaderMappingsNotSetException, 'Header Mappings not set')
-        #expect(subject.status).to eq(ContactsFile::FAILED)
-      end
-    end
-
-  end
 end
