@@ -25,37 +25,9 @@ class ContactsFile < ApplicationRecord
     f.headers
   end
 
-  def import_contacts
-    raise Exceptions::HeaderMappingsNotSetException, 'Header Mappings not set' unless header_mappings
-
-    importer_logs.destroy_all
-    update(status: PROCESSING)
-
-    processed_all? ? update(status: FINISHED) : update(status: FAILED)
-  end
-
   private
 
-  def processed_all?(counter: 0, failed_counter: 0)
-    CSV.parse(contacts_csv.download, headers: true, encoding: 'UTF-8') do |row|
-      counter += 1
-      csv_line = row.to_hash
-      new_contact = new_contact_from_csv(csv_line)
-      next if new_contact.save
-
-      importer_logs.create(candidate: csv_line, error_log: new_contact.errors.messages)
-      failed_counter += 1
-    end
-    failed_counter != counter
-  end
-
-  def new_contact_from_csv(csv_line)
-    Contact.new(user_id: user_id).tap do |new_contact|
-      HEADER_COLUMNS.each { |col| new_contact[col] = csv_line[header_mappings[col.to_s]] }
-    end
-  end
-
   def set_pending_status
-    self.status = PENDING
+    self.status = ContactsFile::PENDING
   end
 end

@@ -36,8 +36,5 @@ module Imports
       end
     end
 
-    def set_pending_status
-      contacts_file.status = ContactsFile::PENDING
-    end
   end
 end
