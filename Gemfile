@@ -47,8 +47,9 @@ group :development, :test do
   gem 'faker'
   gem 'pry', '~> 0.13.1'
   gem 'rspec-rails', '~> 4.0.1'
-  gem 'simplecov', require: false, group: :test
+  gem 'shoulda-callback-matchers'
   gem 'shoulda-matchers'
+  gem 'simplecov', require: false, group: :test
 end
 
 group :development do

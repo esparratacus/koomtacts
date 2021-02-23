@@ -26,17 +26,21 @@ RSpec.describe Contact, type: :model do
   end
 
   context 'associations' do
-    it {expect(subject).to belong_to(:user)}
+    it { expect(subject).to belong_to(:user)}
   end
 
   context 'callbacks' do
+    it { expect(subject).to callback(:set_cc_fields).after(:validation)}
+  end
+
+  context '#set_cc_fields' do
     it 'should assign remaining fields to contact' do
       last_four= subject.cc_number.last(4)
       not_coded_cc_number = subject.cc_number
-      subject.run_callbacks :create
-      expect(subject.franchise).to be('visa')
-      expect(subject.cc_4_digits).to be(last_four)
-      expect(subject.cc_number).not_to be(not_coded_cc_number)
+      subject.send(:set_cc_fields)
+      expect(subject.franchise).to eq('visa')
+      expect(subject.cc_4_digits).to eq(last_four)
+      expect(subject.cc_number).not_to eq(not_coded_cc_number)
     end
   end
 end

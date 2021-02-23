@@ -3,17 +3,20 @@
 require 'csv'
 class ContactsFile < ApplicationRecord
   max_paginates_per 10
-  mount_uploader :contacts, ContactsUploader
 
+  alias_attribute :file_name,:contacts
+  belongs_to :user
   has_many :importer_logs, dependent: :destroy
+  has_one_attached :contacts_csv
+  validates :contacts_csv, presence: true
 
   PENDING         = 'PENDING'.freeze
   PROCESSING      = 'PROCESSING'.freeze
   FAILED          = 'FAILED'.freeze
   FINISHED        = 'FINISHED'.freeze
   IMPORT_STATUSES = [PENDING, PROCESSING, FAILED, FINISHED].freeze
+  HEADER_COLUMNS = %i[name dob address email cc_number phone_number].freeze
 
-  validates_presence_of :contacts
   validates :status, inclusion: { in: IMPORT_STATUSES }, allow_nil: true
   before_create :set_pending_status
 
@@ -23,28 +26,34 @@ class ContactsFile < ApplicationRecord
   end
 
   def import_contacts
+    raise Exceptions::HeaderMappingsNotSetException, 'Header Mappings not set' unless header_mappings
+
     importer_logs.destroy_all
     update(status: PROCESSING)
-    CSV.foreach(contacts.current_path, headers: true) do |row|
-      contact = row.to_hash
-      new_contact = Contact.new(user_id: user_id,
-                                name: contact[header_mappings['name']],
-                                dob: contact[header_mappings['dob']],
-                                address: contact[header_mappings['address']],
-                                email: contact[header_mappings['email']],
-                                cc_number: contact[header_mappings['cc_number']],
-                                phone_number: contact[header_mappings['phone_number']])
 
-      importer_logs.create(candidate: contact, error_log: new_contact.errors.messages) unless new_contact.save
-    end
-    contact_count == importer_logs.count ? update(status: FAILED) : update(status: FINISHED)
-  end
-
-  def contact_count
-    self[:contacts].nil? ? 0 : CSV.foreach(contacts.current_path, headers: true).count
+    processed_all? ? update(status: FINISHED) : update(status: FAILED)
   end
 
   private
+
+  def processed_all?(counter: 0, failed_counter: 0)
+    CSV.parse(contacts_csv.download, headers: true, encoding: 'UTF-8') do |row|
+      counter += 1
+      csv_line = row.to_hash
+      new_contact = new_contact_from_csv(csv_line)
+      next if new_contact.save
+
+      importer_logs.create(candidate: csv_line, error_log: new_contact.errors.messages)
+      failed_counter += 1
+    end
+    failed_counter != counter
+  end
+
+  def new_contact_from_csv(csv_line)
+    Contact.new(user_id: user_id).tap do |new_contact|
+      HEADER_COLUMNS.each { |col| new_contact[col] = csv_line[header_mappings[col.to_s]] }
+    end
+  end
 
   def set_pending_status
     self.status = PENDING
