@@ -37,10 +37,8 @@ module Users
       respond_to do |format|
         if @contacts_file.save
           format.html { redirect_to action: :edit, id: @contacts_file.id }
-          format.json { render :show, status: :created, location: @contacts_file }
         else
           format.html { render :new }
-          format.json { render json: @contacts_file.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -51,10 +49,8 @@ module Users
       respond_to do |format|
         if @contacts_file.update(contacts_file_params)
           format.html { redirect_to @contacts_file, notice: 'Contacts file was successfully updated.' }
-          format.json { render :show, status: :ok, location: @contacts_file }
         else
           format.html { render :show }
-          format.json { render json: @contacts_file.errors, status: :unprocessable_entity }
         end
       end
     end

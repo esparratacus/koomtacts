@@ -56,6 +56,14 @@ RSpec.describe 'contacts_files', type: :request do
     end
   end
 
+  describe 'GET /execute_import' do
+    it 'render a successful response' do
+      contacts_file = user.contacts_files.create! valid_attributes
+      get execute_import_contacts_file_url(contacts_file)
+      expect(response).to redirect_to(contacts_file_url(contacts_file))
+    end
+  end
+
   describe 'POST /create' do
     context 'with valid parameters' do
       it 'creates a new ContactsFile' do
