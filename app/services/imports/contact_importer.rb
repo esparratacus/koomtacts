@@ -8,14 +8,22 @@ module Imports
 
     def call
       raise Exceptions::HeaderMappingsNotSetException, 'Header Mappings not set' unless contacts_file.header_mappings
-
-      contacts_file.importer_logs.destroy_all
-      contacts_file.update(status: ContactsFile::PROCESSING)
-
-      processed_all? ? contacts_file.update(status: ContactsFile::FINISHED) : contacts_file.update(status: ContactsFile::FAILED)
+      read_file
     end
 
     private
+
+    def read_file
+      contacts_file.importer_logs.destroy_all
+      contacts_file.processing!
+      process_file
+    end
+
+    def process_file
+      processed_all? ? contacts_file.finished! : contacts_file.failed!
+    rescue Exceptions::FileNotProcessedException => e
+      contacts_file.processing_failed!
+    end
 
     def processed_all?(counter: 0, failed_counter: 0)
       CSV.parse(contacts_file.contacts_csv.download, headers: true, encoding: 'UTF-8') do |row|
@@ -28,6 +36,9 @@ module Imports
         failed_counter += 1
       end
       failed_counter != counter
+
+    rescue FileNotFoundError => e
+      raise Exceptions::FileNotProcessedException, e.message
     end
 
     def new_contact_from_csv(csv_line)

@@ -9,12 +9,16 @@ FactoryBot.define do
       cc_number: 'tarjeta',
       phone_number: 'teléfono' }
     }
+    status { ContactsFile.statuses[:pending] }
     user
     trait :contacts_file_with_errors do
       contacts_csv { Rack::Test::UploadedFile.new("#{Rails.root}/spec/support/contacts_test_with_errors.csv".force_encoding("UTF-8"), 'text/csv') }
     end
     trait :valid_objects do
       contacts_csv { Rack::Test::UploadedFile.new("#{Rails.root}/spec/support/contacts_test.csv".force_encoding("UTF-8"), 'text/csv') }
+    end
+    trait :mixed_objects do
+      contacts_csv { Rack::Test::UploadedFile.new("#{Rails.root}/spec/support/contacts_test_mixed.csv".force_encoding("UTF-8"), 'text/csv') }
     end
   end
 end
