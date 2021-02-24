@@ -15,7 +15,8 @@ RSpec.describe ImportWorker, type: :worker do
     let(:contacts_file) { create(:contacts_file)}
     it 'should perform expected operation' do
       worker = described_class.new
-      expect{ worker.perform(contacts_file.id) }.to change{ contacts_file.status}.from(ContactsFile::PENDING).to(ContactsFile::FINISHED)
+      worker.perform(contacts_file.id)
+      expect(ContactsFile.find(contacts_file.id).status).to eq(ContactsFile::FINISHED)
     end
   end
 end
