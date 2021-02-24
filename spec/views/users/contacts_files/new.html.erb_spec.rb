@@ -1,12 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "contacts_files/new", type: :view do
+RSpec.describe "/users/contacts_files/new", type: :view do
   before(:each) do
-    assign(:contacts_file, ContactsFile.new(
-      file_name: "MyString",
-      header_mappings: "",
-      status: "MyString"
-    ))
+    assign(:contacts_file, attributes_for(:contacts_file))
   end
 
   it "renders new contacts_file form" do
