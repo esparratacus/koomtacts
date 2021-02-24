@@ -21,7 +21,7 @@ class ContactsFile < ApplicationRecord
   before_create :set_pending_status
 
   def contact_file_headers
-    f = CSV.open(contacts.current_path, headers: true).read
+    f = CSV.parse(contacts_csv.download, headers: true, encoding: 'UTF-8')
     f.headers
   end
 

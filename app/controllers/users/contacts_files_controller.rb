@@ -32,11 +32,11 @@ module Users
     # POST /contacts_files.json
     def create
       @contacts_file = current_user.contacts_files.new(contacts_file_params)
-      @contacts_file.contacts = contacts_file_params.fetch(:contacts)
+      #@contacts_file.contacts = contacts_file_params.fetch(:contacts)
 
       respond_to do |format|
         if @contacts_file.save
-          format.html { redirect_to action: :edit, id: @contacts_file.id, notice: 'Contacts file was successfully created.' }
+          format.html { redirect_to action: :edit, id: @contacts_file.id }
           format.json { render :show, status: :created, location: @contacts_file }
         else
           format.html { render :new }
@@ -77,7 +77,7 @@ module Users
 
     # Only allow a list of trusted parameters through.
     def contacts_file_params
-      params.require(:contacts_file).permit(:contacts, :status,header_mappings:[:dob,:name,:cc_number,:phone_number,:email,:address])
+      params.require(:contacts).permit(:contacts_csv, :status,header_mappings:[:dob,:name,:cc_number,:phone_number,:email,:address])
     end
   end
 end
