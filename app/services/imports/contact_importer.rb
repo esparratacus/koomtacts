@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Imports
   class ContactImporter
     attr_reader :contacts_file
@@ -8,6 +10,7 @@ module Imports
 
     def call
       raise Exceptions::HeaderMappingsNotSetException, 'Header Mappings not set' unless contacts_file.header_mappings
+
       read_file
     end
 
@@ -36,7 +39,6 @@ module Imports
         failed_counter += 1
       end
       failed_counter != counter
-
     rescue FileNotFoundError => e
       raise Exceptions::FileNotProcessedException, e.message
     end
@@ -46,6 +48,5 @@ module Imports
         ContactsFile::HEADER_COLUMNS.each { |col| new_contact[col] = csv_line[contacts_file.header_mappings[col.to_s]] }
       end
     end
-
   end
 end
