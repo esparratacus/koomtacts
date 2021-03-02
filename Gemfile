@@ -11,7 +11,11 @@ gem 'credit_card_validations'
 
 gem 'devise'
 
+gem 'jwt'
+
 gem 'kaminari'
+
+gem 'rack-cors'
 
 gem 'sidekiq'
 
