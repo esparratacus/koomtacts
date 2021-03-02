@@ -15,10 +15,7 @@
     <strong>Status:</strong>
     <%= @contacts_file.status %>
   </p>
-  <p>
-    <strong> Results:</strong>
-    <%= @contacts_file.get_contact_count -  @contacts_file.importer_logs.size %> of <%= @contacts_file.get_contact_count%> imported successfully
-                                                                                        </p>
+
   <table class="table">
     <thead>
     <tr>

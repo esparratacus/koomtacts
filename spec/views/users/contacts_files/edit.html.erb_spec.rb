@@ -1,12 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "contacts_files/edit", type: :view do
+RSpec.describe "/users/contacts_files/edit", type: :view do
   before(:each) do
-    @contacts_file = assign(:contacts_file, ContactsFile.create!(
-      file_name: "MyString",
-      header_mappings: "",
-      status: "MyString"
-    ))
+    @contacts_file = assign(:contacts_file, create(:contacts_file))
   end
 
   it "renders the edit contacts_file form" do
