@@ -11,6 +11,10 @@ gem 'credit_card_validations'
 
 gem 'devise'
 
+gem 'jsonapi_errors_handler'
+
+gem 'jsonapi-serializer'
+
 gem 'jwt'
 
 gem 'kaminari'

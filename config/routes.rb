@@ -10,6 +10,16 @@ Rails.application.routes.draw do
     resources :contacts , only:[:index]
   end
 
+  namespace :api do
+    namespace :v1 do
+      resources :users, only: %i[create] do
+        collection do
+          post :sign_in, to: 'users#sign_in'
+        end
+      end
+    end
+  end
+
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

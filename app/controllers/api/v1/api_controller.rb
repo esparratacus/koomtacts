@@ -1,6 +1,9 @@
-module Api
-  module V1
-    class ApiController < ActionController::API
-    end
+module Api::V1
+  class ApiController < ActionController::API
+    include JsonapiErrorsHandler
+    ErrorMapper.map_errors!({
+                              'ActiveRecord::RecordNotFound' => 'JsonapiErrorsHandler::Errors::NotFound'
+                            })
+    rescue_from ::StandardError, with: lambda { |e| handle_error(e) }
   end
 end
