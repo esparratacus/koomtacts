@@ -17,6 +17,7 @@ Rails.application.routes.draw do
           post :sign_in, to: 'users#sign_in'
         end
       end
+      resources :contacts, only: %i[index]
     end
   end
 

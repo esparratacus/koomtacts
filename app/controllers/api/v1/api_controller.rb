@@ -22,8 +22,8 @@ module Api::V1
     end
     def logged_in_user
       if auth_header
-        decoded_token = JWT.decoded_token(auth_header.split(' ')[1])
-        @curent_user = User.find_by(decoded_token)
+        decoded_token = ApiAuthorization::TokenManager.decoded_token(auth_header.split(' ')[1])
+        @current_user = User.find_by(id: decoded_token['user_id'])
       end
     end
 
