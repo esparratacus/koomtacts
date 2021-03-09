@@ -73,7 +73,7 @@ module Users
 
     # Only allow a list of trusted parameters through.
     def contacts_file_params
-      params.require(:contacts).permit(:contacts_csv, :status,header_mappings:[:dob,:name,:cc_number,:phone_number,:email,:address])
+      params.require(:contacts).permit(:contacts_csv, :status, header_mappings:[:dob,:name,:cc_number,:phone_number,:email,:address])
     end
   end
 end

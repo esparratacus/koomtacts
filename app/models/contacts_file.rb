@@ -15,7 +15,7 @@ class ContactsFile < ApplicationRecord
                  processing: 'PENDING',
                  failed: 'FAILED',
                  finished: 'FINISHED',
-                 processing_failed: 'PROCESSING_FAILED'}
+                 processing_failed: 'PROCESSING_FAILED' }
   HEADER_COLUMNS = %i[name dob address email cc_number phone_number].freeze
 
   before_create :set_pending_status

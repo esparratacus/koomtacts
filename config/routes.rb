@@ -18,6 +18,7 @@ Rails.application.routes.draw do
         end
       end
       resources :contacts, only: %i[index]
+      resources :contacts_files, except: %i[new edit show]
     end
   end
 
