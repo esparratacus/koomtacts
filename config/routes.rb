@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
   root to: "home#index"
   scope module: 'users' do
     resources :contacts_files do
@@ -7,7 +7,7 @@ Rails.application.routes.draw do
         get 'execute_import'
       end
     end
-    resources :contacts , only:[:index]
+    resources :contacts, only: [:index]
   end
 
   namespace :api do

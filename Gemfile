@@ -5,11 +5,13 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.0'
 
+gem 'activerecord-session_store'
+
 gem 'carrierwave'
 
 gem 'credit_card_validations'
 
-gem 'devise'
+gem 'devise', github: 'heartcombo/devise'
 
 gem 'jsonapi_errors_handler'
 
@@ -44,6 +46,13 @@ gem 'jbuilder', '~> 2.7'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+#
+gem "omniauth-rails_csrf_protection"
+
+gem 'omniauth'
+
+gem 'omniauth-github'
+
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
